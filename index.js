@@ -1,4 +1,4 @@
-class Carrito {
+class Cart{
     constructor(products){
         this.products = products;
     }
@@ -42,7 +42,7 @@ class Carrito {
     }
 
     calculateTotal(){
-        return this.calculateSubtotal() + 4.99;
+        return this.calculateSubtotal() + 10.99;
     }
 }
 
@@ -52,17 +52,17 @@ if(!localStorage.articlesList){
     var articlesList = JSON.parse(localStorage.getItem('articlesList'))
 }
 
-var myCart = new Carrito(articlesList);
+var myCart = new Cart(articlesList);
 window.onload = ()=>{
     mainContainer = document.getElementsByTagName("main")[0];
     showHome();
     document.getElementById("header--logo").addEventListener("click", ()=>{
         showHome();
-        document.querySelectorAll(".nav--link").forEach(element => {
+        document.querySelectorAll(".links").forEach(element => {
             element.classList.remove("selected");
         })
     })
-    let navLinks = document.querySelectorAll(".nav--link");
+    let navLinks = document.querySelectorAll(".links");
     navLinks.forEach(element => {
         element.addEventListener("click", ()=>{
             navLinks.forEach(span => {
@@ -83,36 +83,45 @@ window.onload = ()=>{
     navLinks[0].addEventListener("click", ()=>{
         showArticlesSection("Men");
     })
-    document.getElementById("men").addEventListener("click", ()=>{
-        showArticlesSection("Men");
-    })
     navLinks[1].addEventListener("click", ()=>{
-        showArticlesSection("Women");
-    })
-    document.getElementById("women").addEventListener("click", ()=>{
         showArticlesSection("Women");
     })
     navLinks[2].addEventListener("click", ()=>{
         showArticlesSection("Jewelry");
     })
-    document.getElementById("jewelry").addEventListener("click", ()=>{
-        showArticlesSection("Jewelry");
-    })
     navLinks[3].addEventListener("click", ()=>{
-        showArticlesSection("Electronics");
-    })
-    document.getElementById("electronics").addEventListener("click", ()=>{
         showArticlesSection("Electronics");
     })
     document.getElementById("cart").addEventListener("click", ()=>{
         showShoppingCart(myCart);
-        document.querySelectorAll(".nav--link").forEach(element => {
+        document.querySelectorAll(".links").forEach(element => {
             element.classList.remove("selected");
         })
     })
     document.getElementById("login").addEventListener("click", ()=>{
-        showLogInRegister();
+        user();
     })
+    const btn = document.getElementById('submitCheckOut');
+
+    document.getElementById('form')
+      .addEventListener('submit', function(event) {
+        event.preventDefault();
+    
+        btn.value = 'Sending...';
+    
+        const serviceID = 'default_service';
+        const templateID = 'template_rarq5wn';
+    
+        emailjs.sendForm(serviceID, templateID, this)
+          .then(() => {
+            btn.value = 'Send Email';
+            alert('Sent!');
+          }, (err) => {
+            btn.value = 'Send Email';
+            alert(JSON.stringify(err));
+          });
+      });
+
 }
 
 function showHome(){
@@ -145,6 +154,12 @@ function showHome(){
     $("#home").append(home);
 }
 
+function articleRequest(id){
+    httpRequest.open("GET", "https://fakestoreapi.com/products/"+id);
+    httpRequest.onreadystatechange = articleData;
+    httpRequest.send();
+}
+
 function showArticlesSection(section){
     mainContainer.id = "mainArticles";
     mainContainer.innerHTML = "";
@@ -169,16 +184,16 @@ function showArticlesSection(section){
     $("#mainArticles").append(mainHeader);
     let divArticles = $(`<div class="divArticles"></div>`);
     $("#mainArticles").append(divArticles);
-    lanzarPeticionSeccion(section, "asc");
+    orderSection(section, "asc");
     $(".order").change(function(){
-       lanzarPeticionSeccion(section, $(".order").val());
+       orderSection(section, $(".order").val());
     });
 }
 
 function showArticleInfo(id){
     mainContainer.id = "mainArticleInfo";
     mainContainer.innerHTML = "";
-    lanzarPeticionarticle(id);
+    articleRequest(id);
 }
 
 function addArticleToCart(id, name, description, price, img, quantity, size, category){
@@ -246,17 +261,17 @@ function showShoppingCart(myCart){
     }
     let shoppingTitle = $(`<h2 id="shoppingTitle">Your Cart</h2>`); 
     let shoppingContainer = $(`<div id="shoppingContainer">
-            <section id="shoppingContainer--products">
+            <section id="productsContainer">
                 ${emptyShoppingCart}
             </section>
-            <section id="shoppingContainer--price">
+            <section id="priceContainer">
                 <div id="price">
                     <div id="subtotal">
-                        <p class="subtotal--text">Subtotal: <span id="subtotal--price">${(myCart.calculateSubtotal()).toFixed(2)} $</span></p>
-                        <p id="subtotal--text">Shipping costs: <span id="subtotal--price">4.99 $</span></p>
+                        <p class="subtotalText">Subtotal: <span id="subtotalPrice">${(myCart.calculateSubtotal()).toFixed(2)} $</span></p>
+                        <p id="subtotalText">Shipping costs: <span id="subtotalPrice">10.99 $</span></p>
                     </div>
                     <div id="total">
-                        <p id="total--text">Total: <span id="total--price">${(myCart.calculateTotal()).toFixed(2)}$</span></p>
+                        <p id="totalText">Total: <span id="totalPrice">${(myCart.calculateTotal()).toFixed(2)}$</span></p>
                     </div>
                 </div>
                 <div id="linkComprar">
@@ -292,19 +307,19 @@ function showShoppingCart(myCart){
     })
 }
 
-function showLogInRegister(){
-    mainContainer.id = "loginRegister";
+function user(){
+    mainContainer.id = "userData";
     mainContainer.innerHTML = "";
     let forms = $(`<form action="" id="logIn" class="form">
             <h2>Log In</h2>
             <div class="inputs">
                 <div class="input">
                     <label for="username">Username</label>
-                    <input type="text" id="username">
+                    <input type="text" id="username" required>
                 </div>
                 <div class="input">
                     <label for="password">Password</label>
-                    <input type="password" id="password">
+                    <input type="password" id="password" required>
                 </div>
             </div>
             <input type="submit" value="Log In">
@@ -314,28 +329,28 @@ function showLogInRegister(){
             <div class="inputs">
                 <div class="input">
                     <label for="name">Name</label>
-                    <input type="text" id="name">
+                    <input type="text" id="name" required>
                 </div>
                 <div class="input">
                     <label for="surnames">Surname</label>
-                    <input type="text" id="surnames">
+                    <input type="text" id="surnames" required>
                 </div>
                 <div class="input">
                     <label for="username">Username</label>
-                    <input type="text" id="username">
+                    <input type="text" id="username" required>
                 </div>
                 <div class="input">
                     <label for="email">Email</label>
-                    <input type="email" id="email">
+                    <input type="email" id="email" required>
                 </div>
                 <div class="input">
                     <label for="password">Password</label>
-                    <input type="password" id="password">
+                    <input type="password" id="password" required>
                 </div>
             </div>
             <input type="submit" value="Register">
         </form>`);
-    $("#loginRegister").append(forms);
+    $("#userData").append(forms);
     $(".form").submit(function(e){
         e.preventDefault();
     })
@@ -345,34 +360,34 @@ function showCheckOut(){
     mainContainer.id = "checkOut";
     mainContainer.innerHTML = "";
     let form = $(`<form action="" id="checkOutForm">
-            <div id="directionData">
-                <h2>Check Out</h2>
+            <div id="checkOutUser">
+                <h2>User Data</h2>
                 <div class="input">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name">
+                    <input type="text" id="name" name="name" required>
                 </div>
                 <div class="input">
                     <label for="surnames">Surname</label>
-                    <input type="text" id="surnames" name="surname">
+                    <input type="text" id="surnames" name="surname" required>
                 </div>
                 <div class="input">
                     <label for="direction">Address</label>
-                    <input type="text" id="direction" name="direction">
+                    <input type="text" id="direction" name="direction" required>
                 </div>
                 <div class="input">
                     <label for="email">Email</label>
-                    <input type="email" id="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}">
+                    <input type="email" id="email" name="email" required>
                 </div>
             </div>
-            <div id="paymentData">
-                <h2>Payment</h2>
+            <div id="checkOutPayment">
+                <h2>Credit Card</h2>
                 <div class="input">
                     <label for="headliner">Headliner</label>
-                    <input type="text" id="headliner">
+                    <input type="text" id="headliner" name="headliner" required>
                 </div>
                 <div class="input">
                     <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" required maxlength="16" pattern="^[0-9]{16}$" >
+                    <input type="text" id="cardNumber" name="cardNumber" maxlength="16" required>
                 </div>
                 <div>
                     <label for="expiry">Date of Expiry</label>
@@ -410,18 +425,17 @@ function showCheckOut(){
                 </div>
                 <div class="input">
                     <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" required  maxlenght="3">
+                    <input type="text" id="cvv" name="cvv" maxlength="3" required>
                 </div>
             </div>
             <input type="submit" value="Pay" id="submitCheckOut">
         </form>`);
     $("#checkOut").append(form);
-
 }
 
 var httpRequest = new XMLHttpRequest();
 
-function lanzarPeticionSeccion(section, orderBy){
+function orderSection(section, orderBy){
     let sectionName;
     if(section == "Men"){
         sectionName = "men's%20clothing";
@@ -433,11 +447,11 @@ function lanzarPeticionSeccion(section, orderBy){
         sectionName = "electronics";
     }
     httpRequest.open("GET", "https://fakestoreapi.com/products/category/"+sectionName+"?sort="+orderBy);
-    httpRequest.onreadystatechange = tratarPeticionSeccion;
+    httpRequest.onreadystatechange = articleCardData;
     httpRequest.send();
 }
 
-function tratarPeticionSeccion(){
+function articleCardData(){
     if(httpRequest.readyState === XMLHttpRequest.DONE){
         if(httpRequest.status === 200){
             $(".divArticles").html("");
@@ -445,34 +459,28 @@ function tratarPeticionSeccion(){
             articles.forEach(article =>{
                 let articleCard = $(`
                 <div class='articleCard'>
-                    <div class='articleCard--image'>
+                    <div class='cardImg'>
                         <img src='${article.image}' alt=''>
                     </div>
-                    <div class='articleCard--info'>
-                        <span class='articleCard--name'>${article.title}</span>
-                        <span class='articleCard--price'>${article.price} $</span>
+                    <div class='cardInfo'>
+                        <span class='cardName'>${article.title}</span>
+                        <span class='cardPrice'>${article.price} $</span>
                     </div>
                     <input type="hidden" value=${article.id} class="articleID">
                 </div>`);
                 $(".divArticles").append(articleCard);
             })
-            $(".articleCard--image").click(function(){
+            $(".cardImg").click(function(){
                 showArticleInfo($(this).siblings(".articleID").val())
             })
-            $(".articleCard--name").click(function(){
+            $(".cardName").click(function(){
                 showArticleInfo($(this).parent().siblings(".articleID").val())
             })
         }
     }
 }
 
-function lanzarPeticionarticle(id){
-    httpRequest.open("GET", "https://fakestoreapi.com/products/"+id);
-    httpRequest.onreadystatechange = tratarInfoarticle;
-    httpRequest.send();
-}
-
-function tratarInfoarticle(){
+function articleData(){
     if(httpRequest.readyState === XMLHttpRequest.DONE){
         if(httpRequest.status === 200){
             info = JSON.parse(httpRequest.responseText);
@@ -491,14 +499,14 @@ function tratarInfoarticle(){
                 </select>
             </div>`;
             }
-            articleDiv = $(`<div class='articleDiv--image'>
+            articleDiv = $(`<div class='articleImg'>
                     <img src='${info.image}' alt=''>
                 </div>
-                <div class='articleDiv--info'>
+                <div class='articleInfo'>
                     <h2>${info.title}</h2>
                     <h3>Description</h3>
-                    <p class="articleDiv--description">${info.description}</p>
-                    <p class="articleDiv--price">${info.price} $</p>
+                    <p class="articleDescription">${info.description}</p>
+                    <p class="articlePrice">${info.price} $</p>
                     <div class="shoppingDetails">
                     <div class="quantity">
                         <h4>Quantity</h4>
