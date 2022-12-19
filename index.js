@@ -55,9 +55,9 @@ if(!localStorage.articlesList){
 var myCart = new Cart(articlesList);
 window.onload = ()=>{
     mainContainer = document.getElementsByTagName("main")[0];
-    showHome();
-    document.getElementById("header--logo").addEventListener("click", ()=>{
-        showHome();
+    home();
+    document.getElementById("logoIcon").addEventListener("click", ()=>{
+        home();
         document.querySelectorAll(".links").forEach(element => {
             element.classList.remove("selected");
         })
@@ -81,16 +81,16 @@ window.onload = ()=>{
         })
     }
     navLinks[0].addEventListener("click", ()=>{
-        showArticlesSection("Men");
+        articleSection("Men");
     })
     navLinks[1].addEventListener("click", ()=>{
-        showArticlesSection("Women");
+        articleSection("Women");
     })
     navLinks[2].addEventListener("click", ()=>{
-        showArticlesSection("Jewelry");
+        articleSection("Jewelry");
     })
     navLinks[3].addEventListener("click", ()=>{
-        showArticlesSection("Electronics");
+        articleSection("Electronics");
     })
     document.getElementById("cart").addEventListener("click", ()=>{
         showShoppingCart(myCart);
@@ -101,30 +101,33 @@ window.onload = ()=>{
     document.getElementById("login").addEventListener("click", ()=>{
         user();
     })
-    const btn = document.getElementById('submitCheckOut');
 
-    document.getElementById('form')
-      .addEventListener('submit', function(event) {
-        event.preventDefault();
-    
-        btn.value = 'Sending...';
-    
-        const serviceID = 'default_service';
-        const templateID = 'template_rarq5wn';
-    
-        emailjs.sendForm(serviceID, templateID, this)
-          .then(() => {
-            btn.value = 'Send Email';
-            alert('Sent!');
-          }, (err) => {
-            btn.value = 'Send Email';
-            alert(JSON.stringify(err));
-          });
-      });
+    $('#checkOut').on('click', function (){
+        const btn = document.getElementById('submitCheckOut');
+
+        document.getElementById('checkOutForm')
+        .addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            btn.value = 'Sending...';
+        
+            const serviceID = 'default_service';
+            const templateID = 'template_rarq5wn';
+        
+            emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+                btn.value = 'Send Email';
+                alert('Sent!');
+            }, (err) => {
+                btn.value = 'Send Email';
+                alert(JSON.stringify(err));
+            });
+        });
+    });
 
 }
 
-function showHome(){
+function home(){
     mainContainer.id = "home";
     mainContainer.innerHTML = "";
     let home = $(`<div class="section" id="men">
@@ -160,7 +163,7 @@ function articleRequest(id){
     httpRequest.send();
 }
 
-function showArticlesSection(section){
+function articleSection(section){
     mainContainer.id = "mainArticles";
     mainContainer.innerHTML = "";
     let sectionName;
@@ -196,7 +199,7 @@ function showArticleInfo(id){
     articleRequest(id);
 }
 
-function addArticleToCart(id, name, description, price, img, quantity, size, category){
+function addArticle(id, name, description, price, img, quantity, size, category){
     var Article = {
         id: id,
         title: name,
@@ -274,8 +277,8 @@ function showShoppingCart(myCart){
                         <p id="totalText">Total: <span id="totalPrice">${(myCart.calculateTotal()).toFixed(2)}$</span></p>
                     </div>
                 </div>
-                <div id="linkComprar">
-                    <button id="buy">Buy</button>
+                <div id="buy">
+                    <button id="buyButton">Buy</button>
                 </div>
             </section>
         </div>`);
@@ -287,7 +290,6 @@ function showShoppingCart(myCart){
         }else{
             myCart.removeProduct($(this).siblings(".productID").val(), $(this).siblings(".productSize").val());
         }
-        
         $(this).parent().slideUp();
         setTimeout(function(){
             showShoppingCart(myCart);
@@ -431,6 +433,7 @@ function showCheckOut(){
             <input type="submit" value="Pay" id="submitCheckOut">
         </form>`);
     $("#checkOut").append(form);
+    sendEmail();
 }
 
 var httpRequest = new XMLHttpRequest();
@@ -525,10 +528,33 @@ function articleData(){
         $("#mainArticleInfo").append(articleDiv);
         $(".addToCart").click(function(){
             if($("#size").val() == undefined){
-                addArticleToCart(info.id, info.title, info.description, info.price, info.image, parseInt($("#quantity").val(), 10), "", info.category);
+                addArticle(info.id, info.title, info.description, info.price, info.image, parseInt($("#quantity").val(), 10), "", info.category);
             }else{
-                addArticleToCart(info.id, info.title, info.description, info.price, info.image, parseInt($("#quantity").val(), 10), $("#size").val(), info.category);
+                addArticle(info.id, info.title, info.description, info.price, info.image, parseInt($("#quantity").val(), 10), $("#size").val(), info.category);
             }
         })
     }
+}
+
+function sendEmail(){
+    const btn = document.getElementById('submitCheckOut');
+
+    document.getElementById('checkOutForm')
+    .addEventListener('submit', function(event) {
+        event.preventDefault();
+    
+        btn.value = 'Sending...';
+    
+        const serviceID = 'default_service';
+        const templateID = 'template_rarq5wn';
+    
+        emailjs.sendForm(serviceID, templateID, this)
+        .then(() => {
+            btn.value = 'Send Email';
+            alert('Sent!');
+        }, (err) => {
+            btn.value = 'Send Email';
+            alert(JSON.stringify(err));
+        });
+    });
 }
