@@ -317,13 +317,13 @@ header nav span:hover{
     padding-top: 1.5em;
 }
 
-#linkComprar{
+#buy{
     width: 70%;
 }
 
-#buy{
+#buyButton{
     width: 100%;
-    background-color: blue;
+    background-color: green;
     color: white;
     font-weight: bold;
     border: 0;
