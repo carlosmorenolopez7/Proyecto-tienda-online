@@ -7,26 +7,10 @@
 :root{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 300;
-    --goldenColor: rgb(193, 150, 41);
 }
 
 h1, h2, h3{
     font-family: Arial, Helvetica, sans-serif;
-}
-
-h1{
-    font-weight: 500;
-    position: relative;
-}
-
-h2{
-    font-size: 2em;
-    font-weight: 300;
-}
-
-h3{
-    font-size: 1.1em;
-    font-weight: 500;
 }
 
 header{
@@ -35,12 +19,7 @@ header{
     grid-template-rows: 10vh;
     justify-items: center;
     align-items: center;
-    border-bottom: 2px solid black;
-}
-
-header a{
-    text-decoration: none;
-    color: black;
+    border-bottom: 1px solid black;
 }
 
 header i{
@@ -48,7 +27,7 @@ header i{
     cursor: pointer;
 }
 
-#iconos{
+#icons{
     grid-column: 3/-1;
     grid-row: 1/-1;
     justify-self: flex-end;
@@ -60,7 +39,6 @@ header i{
 header nav{
     grid-column: 2/3;
     padding: 20px;
-    text-transform: uppercase
 }
 
 header nav span{
@@ -82,14 +60,10 @@ header nav span:hover{
 .section{
     background-position: center;
     background-size: contain;
-    background-repeat: no-repeat;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
     gap: 1.5em;
-    border-radius: 5px;
     border: 1px solid black;
-    cursor: pointer;
 }
 
 .section h2{
@@ -105,18 +79,10 @@ header nav span:hover{
     height: .1em;
     bottom: 0;
     left: 0;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform .2s ease-in-out;
 }
 
 .section:hover{
     color: lightblue;
-}
-
-.section:hover h2::after{
-    transform: scaleX(1);
-    background-color: red;
 }
 
 .sectionImg img{
@@ -174,9 +140,11 @@ header nav span:hover{
     flex-direction: column;
     margin: 50px;
     cursor: pointer;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
-.articleCard--image{
+.cardImg{
     padding: 2em;
     flex-basis: 70%;
     display: flex;
@@ -184,17 +152,17 @@ header nav span:hover{
     overflow: hidden;
 }
 
-.articleCard--image:hover img{
+.cardImg:hover img{
     transition: all .2s ease-in-out;
     scale: 1.1;
 }
 
-.articleCard--image img{
+.cardImg img{
     width: 60%;
     margin: auto;
 }
 
-.articleCard--info{
+.cardInfo{
     flex-basis: 30%;
     display: flex;
     flex-direction: column;
@@ -202,10 +170,11 @@ header nav span:hover{
     gap: .5em;
     padding: 1em;
     font-size: 1em;
-    background-color: rgb(225, 223, 223);
+    background-color: lightblue;
+    border-radius: 5px;
 }
 
-.articleCard--price{
+.cardPrice{
     font-weight: 600;
 }
 
@@ -216,17 +185,17 @@ header nav span:hover{
     place-items: center;
 }
 
-.articleDiv--image{
+.articleImg{
     grid-column: 2 / 4;
     grid-row: 1 / -1;
     padding: 3em;
 }
 
-.articleDiv--image img{
+.articleImg img{
     width: 90%;
 }
 
-.articleDiv--info{
+.articleInfo{
     grid-column: 4 / 6;
     grid-row: 1 / -1;
     display: flex;
@@ -238,20 +207,20 @@ header nav span:hover{
     padding: 1.5em;
 }
 
-.articleDiv--description{
+.articleDescription{
     text-align: left;
 }
 
-.articleDiv--info h2{
+.articleInfo h2{
     line-height: 1.2em;
     font-weight: 500;
 }
 
-.articleDiv--info h3{
+.articleInfo h3{
     text-decoration: underline;
 }
 
-.articleDiv--price{
+.articlePrice{
     font-weight: 600;
     font-size: 1.2em;
     transition: all .2s ease-in-out;
@@ -260,7 +229,7 @@ header nav span:hover{
     cursor: default;
 }
 
-.articleDiv--price:hover{
+.articlePrice:hover{
     scale: 1.2;
 }
 
@@ -316,7 +285,7 @@ header nav span:hover{
     border-radius: 10px;
 }
 
-#shoppingContainer--products{
+#productsContainer{
     flex-basis: 70%;
     height: 90%;
     margin-top: auto;
@@ -325,10 +294,9 @@ header nav span:hover{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid black;
 }
 
-#shoppingContainer--price{
+#priceContainer{
     flex-basis: 30%;
     display: flex;
     flex-direction: column;
@@ -365,11 +333,7 @@ header nav span:hover{
     transition: all .2s ease-in-out;
 }
 
-#buy:hover{
-    background-color: blue;
-}
-
-#shoppingContainer--products{
+#productsContainer{
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -419,25 +383,21 @@ header nav span:hover{
 .deleteProductBtn{
     color: #e91b0c;
     cursor: pointer;
-    transition: all .1s ease-in-out;
     border: 1px solid black;
-    border-radius: 1rem;
-}
-
-.deleteProductBtn:active{
-    scale: 0.9;
+    border-radius: 50px;
 }
 
 .productQuantity{
     width: 15%;
 }
 
-#loginRegister{
-    display: grid;
-    grid-template-columns: repeat(2, 50vw);
-    grid-template-rows: 62.6vh;
+#userData{
+    display: flex;
+    flex-direction: row;
     place-items: center;
-    padding: .4em;
+    gap: 10rem;
+    margin-left: 20rem;
+    padding: 4rem;
 }
 
 #logIn{
