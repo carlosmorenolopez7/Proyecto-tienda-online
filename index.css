@@ -259,6 +259,14 @@ header nav span:hover{
     margin: 0 auto;
 }
 
+.addToCart:hover{
+    background-color: lightgreen;
+}
+
+.addToCart:active{
+    background-color: blue;
+}
+
 #shoppingCart{
     display: grid;
     grid-template-columns: repeat(6, 1fr);
